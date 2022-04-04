@@ -26,6 +26,7 @@ function Contest({ user, problems, accepted_green, wrong_red }) {
     .get('https://codeforces.com/api/contest.list')
     .then(res => {
       setContest_list(res.data.result);
+      console.log(contest_list);
     })
     .catch(err => console.log(err));
 

@@ -69,7 +69,7 @@ function ContestTable({ contest_type, contest_list, contest_data, accepted_green
             if(accepted_green[color_checker]) show_color = 'green';
             else if(wrong_red[color_checker]) show_color = 'red';
             return(
-              <ContestElement val={val} diff={diff} problem_name={problem_name} show_color={show_color} />
+              <ContestElement val={val} diff={diff} diffRating={val.rating} problem_name={problem_name} show_color={show_color} />
             )
           })
         }

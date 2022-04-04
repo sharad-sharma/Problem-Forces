@@ -35,6 +35,7 @@ function App() {
   const [wrong_red, setWrongRed] = useState({});
   const [navmssg, setNavmssg] = useState('Enter Username');
   const [refresh, setRefresh] = useState(1);
+  const [isLoading, SetIsLoading] = useState(false);
 
   useEffect(() => {
     axios
@@ -52,6 +53,7 @@ function App() {
 
   useEffect(() => {
     if(user) {
+    SetIsLoading(true);
     axios
       .get(`https://codeforces.com/api/user.status?handle=${user}&count=1000`)
       .then(res => {
@@ -62,10 +64,12 @@ function App() {
           setAttempted(res.data.result)
           setNavmssg(user)
         }
+        SetIsLoading(false);
       })
       .catch(err => {
         setNavmssg('Incorrect Username')
         console.log(err)
+        SetIsLoading(false);
       })
     }
   }, [user, refresh])
@@ -97,9 +101,8 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <div className="App">
         <Router>
-        <Navbar changeUser={changeUser} navmssg={navmssg} doRefresh={doRefresh}/>
+        <Navbar changeUser={changeUser} navmssg={navmssg} doRefresh={doRefresh} isLoading={isLoading} />
           <Switch>
-            {/* <Route exact path="/" component={Contest} /> */}
             <Route exact path="/" render={(props) => <Contest user={user} accepted_green={accepted_green} wrong_red={wrong_red} problems={problems} {...props} />} />
             <Route exact path="/problems" render={(props) => <Problemset user={user} problems={problems.slice(-100)} accepted_green={accepted_green} wrong_red={wrong_red} {...props} />} />
           </Switch>
