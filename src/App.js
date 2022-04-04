@@ -104,7 +104,7 @@ function App() {
         <Navbar changeUser={changeUser} navmssg={navmssg} doRefresh={doRefresh} isLoading={isLoading} />
           <Switch>
             <Route exact path="/" render={(props) => <Contest user={user} accepted_green={accepted_green} wrong_red={wrong_red} problems={problems} {...props} />} />
-            <Route exact path="/problems" render={(props) => <Problemset user={user} problems={problems.slice(-100)} accepted_green={accepted_green} wrong_red={wrong_red} {...props} />} />
+            <Route exact path="/problems" render={(props) => <Problemset user={user} problems={problems.slice(-100).reverse()} accepted_green={accepted_green} wrong_red={wrong_red} {...props} />} />
           </Switch>
         </Router>
       </div>

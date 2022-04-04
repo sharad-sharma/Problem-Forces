@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     '& > * + *': {
       marginLeft: theme.spacing(0.5),
     },
+    fontSize: 15,
   },
   root: {
     flexGrow: 1,
@@ -37,7 +38,13 @@ const useStyles = makeStyles((theme) => ({
   Contest_colm: {
     backgroundColor: '#fafafa',
   },
+  bold: {
+    fontWeight: 400,
+    width: 140,
+  },
 }));
+
+const indexes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
 function ContestTable({ contest_type, contest_list, contest_data, accepted_green, wrong_red }) {
   const classes = useStyles();
@@ -89,16 +96,12 @@ function ContestTable({ contest_type, contest_list, contest_data, accepted_green
           <TableContainer component={Paper} className="root">
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
-                <TableRow>
-                  <TableCell align="left">Contest</TableCell>
-                  <TableCell align="left">A</TableCell>
-                  <TableCell align="left">B</TableCell>
-                  <TableCell align="left">C</TableCell>
-                  <TableCell align="left">D</TableCell>
-                  <TableCell align="left">E</TableCell>
-                  <TableCell align="left">F</TableCell>
-                  <TableCell align="left">G</TableCell>
+              <TableRow>
+                  <TableCell align="left" className={classes.problem_colm}> <Typography className={classes.bold} >Contest</Typography></TableCell>
                   {/* <TableCell align="left">H</TableCell> */}
+                  {indexes.map((indexx) => (
+                    <TableCell key={indexx} align="left"> <Typography className={classes.bold} >{indexx}</Typography> </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
