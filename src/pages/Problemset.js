@@ -14,7 +14,12 @@ const useStyles = makeStyles({
     minWidth: 275,
     marginBottom: 20,
     height: "100%",
+    transition: "transform 0.15s ease-in-out",
+    "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
     // backgroundColor: '#ffe3e3',
+  },
+  heading: {
+    padding: 20,
   },
   accepted: {
     minWidth: 275,
@@ -82,7 +87,6 @@ function Problemset({ user, problems, accepted_green, wrong_red }) {
     const diff = Difficulty(problem.rating)
 
     return (
-      //<p>{problem.name}</p>
       <Grid key={name} item sm={4} xs={12}>
         <Card
           className={
@@ -143,10 +147,14 @@ function Problemset({ user, problems, accepted_green, wrong_red }) {
 
   return (
     <div className={classes.graybg}>
-      <h1>Problems</h1>
+      <Typography className={classes.heading} component="h2" variant="h4" color="textPrimary" gutterBottom>
+        Problems
+      </Typography>
+      <div style={{margin: 10}} >
       <Grid container spacing={3}>
         {solve}
       </Grid>
+      </div>
     </div>
   );
 }

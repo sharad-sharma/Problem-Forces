@@ -3,12 +3,21 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TableCell } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import Link from '@material-ui/core/Link';
+import DifficultyCircle from "./DifficultyCircle";
+import { DifficultyPercentage } from "../util/DIfficultyPercentage";
 
 const useStyles = makeStyles((theme) => ({
   typo: {
     '& > * + *': {
       marginLeft: theme.spacing(0.5),
     },
+  },
+  root: {
+    '& > *': {
+      margin: theme.spacing(0.2),
+    },
+    display: 'flex',
+    flexDirection: 'row',
   },
   nothing: {
 
@@ -45,7 +54,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ContestElement({ val, diff, problem_name, show_color }) {
+const colour_map = {
+  difficultyRedBlack: {
+    color: '#aa0000'
+  },
+  difficultyRed: {
+    color: '#ff001f',
+  },
+  difficultyOrange: {
+    color: '#fe8c00',
+  },
+  difficultyVoilet: {
+    color: '#aa00aa',
+  },
+  difficultyBlue: {
+    color: '#0000ff',
+  },
+  difficultyCyan: {
+    color: '#03a8ad',
+  },
+  difficultyGreen: {
+    color: '#008000',
+  },
+  difficultyGray: {
+    color: '#808080',
+  }
+}
+
+function ContestElement({ val, diff, diffRating, problem_name, show_color }) {
   const classes = useStyles();
 
   return (
@@ -56,7 +92,10 @@ function ContestElement({ val, diff, problem_name, show_color }) {
         ? classes.wrong
         : classes.nothing
     } align="left">
+      <div className={classes.root}>
+      <DifficultyCircle percentage={DifficultyPercentage(diffRating)} diffRating={diffRating} colour={colour_map[diff].color} />
       <Typography className={classes.typo}>
+        
         <Link
           className={
             diff === "difficultyRed"
@@ -82,6 +121,7 @@ function ContestElement({ val, diff, problem_name, show_color }) {
           {`${val.index}. ${problem_name}`}
         </Link>
       </Typography>
+      </div>
     </TableCell>
   );
 }
