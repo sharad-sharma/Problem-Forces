@@ -59,8 +59,8 @@ function ContestTable({ contest_type, contest_list, contest_data, accepted_green
   let solve = contest_list.length > 0?contest_list.map((row_val) => {
     const row = row_val.id;
     // contest should match with specified type
-    if(!row_val.name.includes(dummy)) return ;
-    if(!contest_data[row]) return ;
+    if(!row_val.name.includes(dummy)) return "";
+    if(!contest_data[row]) return "";
     else return (
       <TableRow key={row}>
         <TableCell className={classes.Contest_colm} align="left" component="th" scope="row">
