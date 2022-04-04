@@ -3,7 +3,6 @@ import { makeStyles, fade } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import InputBase from '@material-ui/core/InputBase';
@@ -14,6 +13,9 @@ import { Link } from 'react-router-dom';
 import { Link as Link2 } from '@material-ui/core';
 import { Divider, Drawer, List, ListItem, ListItemText, Menu, MenuItem } from '@material-ui/core';
 import clsx from 'clsx'
+import SimpleSnackbar from '../util/Snackbar';
+import UserHandleElement from './UserHandleElement';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    textAlign:"center",
   },
   search: {
     position: 'relative',
@@ -76,15 +79,13 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     color: '#1e88e5',
   },
+  Progress: {
+    padding: 10,
+  }
 }));
 
-function Navbar({ changeUser, navmssg, doRefresh }) {
+function Navbar({ changeUser, navmssg, doRefresh, isLoading = false }) {
   const classes = useStyles();
-  //changeUser('tourist')
-
-  // const clicked = () => {
-  //   console.log('clicked')
-  // }
   const [username, setUsername] = useState('')
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -122,6 +123,11 @@ function Navbar({ changeUser, navmssg, doRefresh }) {
             Problemforces
           </Typography>
         </ListItem>
+        <ListItem key={'Problem Forces version'} >
+          <Typography className={classes.title} variant="caption" display="block">
+            V1.2
+          </Typography>
+        </ListItem>
       </List>
       <Divider />
       <List>
@@ -134,20 +140,18 @@ function Navbar({ changeUser, navmssg, doRefresh }) {
         <ListItem button key={'Login'} disabled>
           <ListItemText primary={'Login'} />
         </ListItem>
-        
+
       </List>
       <Divider />
       <ListItem button key={'Codeforces'} component={Link2} target="_blank" rel="noopener" href="https://codeforces.com">
         <ListItemText primary={'Codeforces'} />
       </ListItem>
-      {/* <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <MenuIcon /> : <MenuIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List> */}
+      <ListItem button key={'PracticeChef'} component={Link2} target="_blank" rel="noopener" href="https://practicechef.herokuapp.com">
+        <ListItemText primary={'PracticeChef'} />
+      </ListItem>
+      <ListItem button key={'Problemforcesv1'} component={Link2} target="_blank" rel="noopener" href="https://problemforces.firebaseapp.com/">
+        <ListItemText primary={'Problemforces v1.1'} />
+      </ListItem>
     </div>
   );
 
@@ -161,19 +165,13 @@ function Navbar({ changeUser, navmssg, doRefresh }) {
           <Drawer anchor={'left'} open={state['left']} onClose={toggleDrawer('left', false)}>
             {list('left')}
           </Drawer>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h5" className={classes.title}>
             Problem Forces
           </Typography>
-          {/* <Button color="inherit" component={Link} to="/">
-            Contests
-          </Button>
-          <Button color="inherit" component={Link} to="/problems">
-            Problemset
-          </Button> */}
           <IconButton color="inherit" aria-label="menu" onClick={() => doRefresh()} >
             <RefreshIcon />
           </IconButton>
-          
+
           <div>
             <IconButton color="inherit" onClick={handleClick2} aria-label="menu">
               <MoreVertIcon />
@@ -185,8 +183,8 @@ function Navbar({ changeUser, navmssg, doRefresh }) {
               open={Boolean(anchorEl)}
               onClose={handleClose2}
             >
-              {/* <MenuItem onClick={handleClose2}>Refresh</MenuItem> */}
               <MenuItem component={Link2} target="_blank" rel="noopener" href="https://codeforces.com" onClick={handleClose2}>Codeforces</MenuItem>
+              <MenuItem component={Link2} target="_blank" rel="noopener" href="https://practicechef.herokuapp.com" onClick={handleClose2}>Practice Chef</MenuItem>
               <MenuItem onClick={handleClose2} disabled>Login</MenuItem>
             </Menu>
           </div>
@@ -197,14 +195,15 @@ function Navbar({ changeUser, navmssg, doRefresh }) {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="User ID"
+              placeholder="User Handle"
               value={username}
               onChange={e => setUsername(e.target.value)}
               onKeyPress={(ev) => {
                 if (ev.key === 'Enter') {
                   // Do code here
-                  changeUser(username)
                   ev.preventDefault();
+                  ev.target.blur();
+                  changeUser(username)
                 }
               }}
               classes={{
@@ -214,12 +213,20 @@ function Navbar({ changeUser, navmssg, doRefresh }) {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
-          {/* <Button className={classes.user} color="inherit" onClick={() => changeUser(username)}>User</Button> */}
+          {isLoading ? <CircularProgress className={classes.Progress} disableShrink size={30} color="secondary" /> : ""}
+          <Typography variant="h6" className={classes.title}>
 
-          <Button className={classes.username} color="inherit">{navmssg}</Button>
-          
+          </Typography>
+          {
+            navmssg === 'Incorrect Username' | navmssg === 'Enter Username'
+              ? ""
+              : <UserHandleElement username={navmssg} />
+          }
         </Toolbar>
       </AppBar>
+      {navmssg === 'Incorrect Username' ? <SimpleSnackbar message={"Incorrect Username"} />
+        : navmssg !== 'Enter Username' ? <SimpleSnackbar message={`Welcome ${navmssg}`} />
+          : ""}
     </div>
   );
 }
